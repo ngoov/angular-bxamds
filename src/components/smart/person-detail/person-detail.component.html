@@ -1,0 +1,68 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <h1>Editing '{{ vm.name }}'</h1>
+  <button [routerLink]="['/people', vm.previousPersonId]" [disabled]="vm.previousPersonButtonDisabled">Previous person</button>
+  <button [routerLink]="['/people', vm.nextPersonId]" [disabled]="vm.nextPersonButtonDisabled">next person</button>
+
+  <p>Dirty: {{vm.formDirty}}</p>
+  <p>Valid: {{vm.formValid}}</p>
+  <form [model]="vm.form" [suite]="suite" #form="ngForm" (ngSubmit)="submit()">
+    <fieldset>
+      <label class="form-group" inputWrapper>
+        <span class="form-group__label">Name</span>
+        <input type="text" [ngModel]="vm.form.name" name="name" />
+      </label>
+      <label class="form-group" inputWrapper>
+        <span class="form-group__label">Hair Color</span>
+        <input type="text" [ngModel]="vm.form.hair_color" name="hair_color" />
+      </label>
+      <div class="form-group" inputWrapper>
+        <span class="form-group__label"> Gender </span>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="male"
+            [ngModel]="vm.form.gender"
+          />Male
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="female"
+            [ngModel]="vm.form.gender"
+          />Female
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="gender"
+            value="n/a"
+            [ngModel]="vm.form.gender"
+          />Other
+        </label>
+      </div>
+      <div class="form-group" inputWrapper>
+        <label class="form-group__label">Films</label>
+        <select [ngModel]="vm.form.films" name="films" [disabled]="vm.filmsDisabled" multiple>
+          <option [ngValue]="film.url" *ngFor="let film of vm.films">
+            {{ film.title }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="!vm.hideSpecies" inputWrapper>
+        <label class="form-group__label">Species</label>
+        <select [ngModel]="vm.form.species" name="species" multiple>
+          <option [ngValue]="species.url" *ngFor="let species of vm.species">
+            {{ species.name }}
+          </option>
+        </select>
+      </div>
+      <pre>
+        {{vm.form|json}}
+      </pre>
+      <button type="button" (click)="reset()">Reset changes</button>
+      <button>Submit form</button>
+    </fieldset>
+  </form>
+</ng-container>

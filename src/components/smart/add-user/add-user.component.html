@@ -1,0 +1,55 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <h1>Add user</h1>
+  <p>Form dirty: {{ vm.formDirty }}</p>
+  <p>Form valid: {{ vm.formValid }}</p>
+  <form [model]="vm.form" [suite]="suite" #form="ngForm" (ngSubmit)="submit()">
+    <fieldset>
+      <div inputWrapper>
+        <label class="form-group">
+          <span class="form-group__label">First name</span>
+          <input type="text" [ngModel]="vm.form.firstName" name="firstName" />
+        </label>
+      </div>
+
+      <div inputWrapper>
+        <label class="form-group">
+          <span class="form-group__label">Last name</span>
+          <input type="text" [ngModel]="vm.form.lastName" name="lastName" />
+        </label>
+      </div>
+      <app-address
+        [street]="vm.form.address.street"
+        [city]="vm.form.address.city"
+        [zipcode]="vm.form.address.zipcode"
+        [number]="vm.form.address.number"
+        [country]="vm.form.address.country"
+      >
+      </app-address>
+      <div ngModelGroup="passwords" inputWrapper>
+        <h2>Password</h2>
+        <label class="form-group">
+          <span class="form-group__label">Password</span>
+          <input
+            type="password"
+            [disabled]="vm.passwordDisabled"
+            [ngModel]="vm.form.passwords.password"
+            name="password"
+          />
+        </label>
+        <label class="form-group">
+          <span class="form-group__label">Confirm password</span>
+          <input
+            type="password"
+            [disabled]="vm.passwordDisabled"
+            [ngModel]="vm.form.passwords.confirmPassword"
+            name="confirmPassword"
+          />
+        </label>
+      </div>
+      <pre>
+        {{ vm.form | json }}
+      </pre>
+      <button>Submit form</button>
+    </fieldset>
+  </form>
+</ng-container>
