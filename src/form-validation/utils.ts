@@ -1,6 +1,6 @@
 import { AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
-import { SuiteResult } from "vest";
 import { set } from 'lodash';
+import { z } from 'zod';
 
 export function getControlPath(
   formGroup: FormGroup,
@@ -36,7 +36,7 @@ export function getGroupInPath(
         if (path) {
           return key + '.' + path;
         }
-      } 
+      }
       if (ctrl === control) {
         return key;
       }
@@ -48,14 +48,15 @@ export function getGroupInPath(
 export function createValidator<T>(
   field: string,
   model: T,
-  suite: (model: T, field: string) => SuiteResult
+  schema: z.ZodType<T>
 ): ValidatorFn {
   return (control: AbstractControl) => {
     const mod: T = { ...model };
 
     set(mod, field, control.value); // Update the property with path
-    const result = suite(mod, field);
-    const errors = result.getErrors()[field];
+    const result = schema.safeParse(model);
+    const errors = [];
+    console.log(`schema result for ${field}`, result); // !result.success ? result.error.issues[field] : [];
     return errors ? { error: errors[0], errors } : null;
   };
 }

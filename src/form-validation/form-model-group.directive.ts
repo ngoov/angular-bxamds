@@ -20,7 +20,7 @@ export class FormModelGroupDirective<T> implements OnDestroy {
     .subscribe(() => {
       if(this.ngModelGroup.name && this.child) {
         const formGroup = this.child.control.parent;
-        const { suite } = this.formDirective;
+        const { schema } = this.formDirective;
         const field = getGroupInPath(
           this.formDirective.ngForm.control,
           this.ngModelGroup.name,
@@ -29,7 +29,7 @@ export class FormModelGroupDirective<T> implements OnDestroy {
         const validatorFn = createValidator(
           field,
           this.formDirective.model,
-          suite
+          schema
         );
         if(formGroup){
           formGroup.clearValidators();

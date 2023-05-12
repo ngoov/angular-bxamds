@@ -17,7 +17,7 @@ export class FormModelDirective<T> implements OnDestroy {
     this.formDirective.formChanges$
       .pipe(takeUntil(this.destroy$$))
       .subscribe(() => {
-        const { suite } = this.formDirective;
+        const { schema } = this.formDirective;
         const field = getControlPath(
           this.formDirective.ngForm.control,
           this.ngModel.name,
@@ -26,7 +26,7 @@ export class FormModelDirective<T> implements OnDestroy {
         const validatorFn = createValidator(
           field,
           this.formDirective.model,
-          suite
+          schema
         );
         this.ngModel.control.clearValidators();
         this.ngModel.control.addValidators(validatorFn);

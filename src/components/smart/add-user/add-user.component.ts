@@ -2,15 +2,14 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FormGroup, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable } from 'rxjs';
-import { userValidations } from '../../../validations/user.validations';
 import { AddressComponent } from '../../../components/ui/address/address.component';
 import { ObservableState } from '../../../observable-state';
-import { User } from '../../../types/user';
+import { User, userSchema } from '../../../types/user';
 import { FormDirective } from '../../../form-validation/form.directive';
-import { Suite } from 'vest';
 import { InputWrapperComponent } from '../../../form-validation/input-wrapper.component';
 import { FormModelGroupDirective } from '../../../form-validation/form-model-group.directive';
 import { FormModelDirective } from '../../../form-validation/form-model.directive';
+import { z } from 'zod';
 
 export type AddUserState = {
   form: User;
@@ -34,11 +33,11 @@ export class AddUserComponent
 {
   @ViewChild('form') public form: NgForm;
   public readonly vm$: Observable<ViewModel> = this.state$;
-  public readonly suite: Suite<User> = userValidations;
+  public readonly suite: z.ZodType<User> = userSchema;
   constructor() {
     super();
     this.initialize({
-      form: new User(),
+      form: {},
       formDirty: false,
       formValid: true,
       street: '',
@@ -60,11 +59,11 @@ export class AddUserComponent
       ),
       passwordDisabled: this.select('street').pipe(map(street => street === '')),
       form: this.form.valueChanges.pipe(
-        map((v) => new User({ ...this.snapshot.form, ...v }))
+        map((v) => ({ ...this.snapshot.form, ...v }))
       ),
-      formDirty: 
+      formDirty:
         this.form.statusChanges.pipe(map(() => this.form.dirty)),
-      formValid: 
+      formValid:
         this.form.statusChanges.pipe(map(() => this.form.valid)),
     });
   }

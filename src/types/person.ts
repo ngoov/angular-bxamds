@@ -1,25 +1,22 @@
-export class Person {
-  public name: string = '';
-  public height: string = '';
-  public mass: string = '';
-  public hair_color: string = '';
-  public skin_color: string = '';
-  public eye_color: string = '';
-  public birth_year: string = '';
-  public gender: string = '';
-  public homeworld: string = '';
-  public films: string[] = [];
-  public species: string[] = [];
-  public vehicles: string[] = [];
-  public starships: string[] = [];
-  public created?: string;
-  public edited?: string;
-  public url?: string;
-  constructor(person?: Partial<Person>) {
-    if (person) {
-      Object.assign(this, { ...person });
-    }
-  }
-}
-// validation on error
-// validation on warning
+import { z } from 'zod';
+
+export const personSchema = z.object({
+  name: z.string(),
+  height: z.string(),
+  mass: z.string(),
+  hair_color: z.string().refine(color => color !== 'blond', 'Hair color can not be blond'),
+  skin_color: z.string(),
+  eye_color: z.string(),
+  birth_year: z.string(),
+  gender: z.string(),
+  homeworld: z.string(),
+  films: z.array(z.string()).min(1),
+  species: z.array(z.string()).min(1),
+  vehicles: z.array(z.string()),
+  starships: z.array(z.string()),
+  created: z.string().optional(),
+  edited: z.string().optional(),
+  url: z.string().optional(),
+});
+
+export type Person = z.infer<typeof personSchema>;
