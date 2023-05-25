@@ -1,12 +1,12 @@
-import { TypeOf, z } from 'zod';
-import { Address, addressSchema } from "./address";
+import { z } from 'zod';
+import { addressSchema } from "./address";
 
 export const userSchema = z.object({
-  firstName: z.string(),
+  firstName: z.string().nonempty(),
   lastName: z.string(),
   passwords: z.object({
-    password: z.string().min(6),
-    confirmPassword: z.string(),
+    password: z.string().min(6).optional(),
+    confirmPassword: z.string().optional(),
   }).refine(({password, confirmPassword}) => password === confirmPassword, {
     message: "Passwords should match",
     path: ['confirmPassword']

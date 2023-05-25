@@ -1,11 +1,12 @@
 <ng-container *ngIf="vm$ | async as vm">
   <h1>Editing '{{ vm.name }}'</h1>
-  <button [routerLink]="['/people', vm.previousPersonId]" [disabled]="vm.previousPersonButtonDisabled">Previous person</button>
+  <button [routerLink]="['/people', vm.previousPersonId]" [disabled]="vm.previousPersonButtonDisabled">Previous
+    person</button>
   <button [routerLink]="['/people', vm.nextPersonId]" [disabled]="vm.nextPersonButtonDisabled">next person</button>
 
   <p>Dirty: {{vm.formDirty}}</p>
   <p>Valid: {{vm.formValid}}</p>
-  <form [model]="vm.form" [suite]="suite" #form="ngForm" (ngSubmit)="submit()">
+  <form [model]="vm.form" [schema]="suite" #form="ngForm" (ngSubmit)="submit()">
     <fieldset>
       <label class="form-group" inputWrapper>
         <span class="form-group__label">Name</span>
@@ -18,28 +19,13 @@
       <div class="form-group" inputWrapper>
         <span class="form-group__label"> Gender </span>
         <label>
-          <input
-            type="radio"
-            name="gender"
-            value="male"
-            [ngModel]="vm.form.gender"
-          />Male
+          <input type="radio" name="gender" value="male" [ngModel]="vm.form.gender" />Male
         </label>
         <label>
-          <input
-            type="radio"
-            name="gender"
-            value="female"
-            [ngModel]="vm.form.gender"
-          />Female
+          <input type="radio" name="gender" value="female" [ngModel]="vm.form.gender" />Female
         </label>
         <label>
-          <input
-            type="radio"
-            name="gender"
-            value="n/a"
-            [ngModel]="vm.form.gender"
-          />Other
+          <input type="radio" name="gender" value="n/a" [ngModel]="vm.form.gender" />Other
         </label>
       </div>
       <div class="form-group" inputWrapper>
@@ -59,7 +45,7 @@
         </select>
       </div>
       <pre>
-        {{vm.form|json}}
+      {{vm.form|json}}
       </pre>
       <button type="button" (click)="reset()">Reset changes</button>
       <button>Submit form</button>

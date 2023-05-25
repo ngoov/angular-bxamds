@@ -8,9 +8,7 @@ export class PersonService {
   private readonly httpClient = inject(HttpClient);
 
   public getPerson(id: string): Observable<Person> {
-    return this.httpClient.get<Person>(`https://swapi.dev/api/people/${id}`).pipe(
-      map(v => new Person(v))
-    )
+    return this.httpClient.get<Person>(`https://swapi.dev/api/people/${id}`);
   }
   public getPeople(): Observable<ListResponse<Person>> {
     return this.httpClient.get<ListResponse<Person>>(`https://swapi.dev/api/people`)

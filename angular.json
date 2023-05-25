@@ -16,6 +16,7 @@
             "outputPath": "dist/demo",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "tsConfig": "tsconfig.json",
             "assets": [],
             "styles": ["src/global_styles.scss"],
             "scripts": []
@@ -31,7 +32,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

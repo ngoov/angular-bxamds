@@ -16,6 +16,7 @@ export class FormDirective<T> implements OnChanges {
   public readonly ngForm = inject(NgForm, { self: true });
 
   public ngOnChanges(): void {
+    console.log('form changed')
     this.formChanges$$.next();
   }
 }

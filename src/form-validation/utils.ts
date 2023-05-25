@@ -1,6 +1,5 @@
 import { AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
-import { set } from 'lodash';
-import { z } from 'zod';
+import { SafeParseError, ZodError, z } from 'zod';
 
 export function getControlPath(
   formGroup: FormGroup,
@@ -45,18 +44,21 @@ export function getGroupInPath(
   return '';
 }
 
+const isZodError = <T>(result: z.SafeParseReturnType<T, T>): result is SafeParseError<T> => !result.success;
+
 export function createValidator<T>(
   field: string,
   model: T,
   schema: z.ZodType<T>
 ): ValidatorFn {
   return (control: AbstractControl) => {
-    const mod: T = { ...model };
-
-    set(mod, field, control.value); // Update the property with path
     const result = schema.safeParse(model);
-    const errors = [];
-    console.log(`schema result for ${field}`, result); // !result.success ? result.error.issues[field] : [];
+    let errors = [];
+    if(isZodError(result)){
+      errors = result.error.flatten().fieldErrors[field];
+      console.log(`fielderrors ${field}`, result.error.issues)
+      console.log(`fielderrors ${field}`, result.error.flatten().fieldErrors)
+    }
     return errors ? { error: errors[0], errors } : null;
   };
 }

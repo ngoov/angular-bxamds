@@ -37,7 +37,17 @@ export class AddUserComponent
   constructor() {
     super();
     this.initialize({
-      form: {},
+      form: {
+        firstName: '',
+        lastName: '',
+        address: {
+          street: ''
+        },
+        passwords: {
+          password: 'passwork',
+          confirmPassword: ''
+        }
+      },
       formDirty: false,
       formValid: true,
       street: '',

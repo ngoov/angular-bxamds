@@ -1,14 +1,12 @@
 import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
 import { ObservableState } from '../../../observable-state';
-import { Person } from '../../../types/person';
+import { Person, personSchema } from '../../../types/person';
 import { map, Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FacadeService } from '../../../facade.service';
-import { personValidations } from '../../../validations/person.validations';
 import { FormDirective } from '../../../form-validation/form.directive';
-import { Suite } from 'vest';
 import { InputWrapperComponent } from '../../../form-validation/input-wrapper.component';
 import { FormModelDirective } from '../../../form-validation/form-model.directive';
 import { FormModelGroupDirective } from '../../../form-validation/form-model-group.directive';
@@ -35,7 +33,7 @@ export class PersonDetailComponent
 {
   @ViewChild('form') public form: NgForm;
 
-  public readonly suite: Suite<Person> = personValidations;
+  public readonly suite = personSchema;
   private readonly facade = inject(FacadeService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly personId$ = this.activatedRoute.params.pipe(
@@ -101,8 +99,8 @@ export class PersonDetailComponent
     super();
     const { people } = this.facade.peopleObservableState.snapshot;
     this.initialize({
-      person: new Person(),
-      form: new Person(),
+      person: {},
+      form: {},
       people,
       species: [],
       films: [],
@@ -125,7 +123,7 @@ export class PersonDetailComponent
     this.select('person').subscribe((v) => this.form.reset(v));
     this.connect({
       form: this.form.valueChanges.pipe(
-        map((v) => new Person({ ...this.snapshot.form, ...v }))
+        map((v) => ({ ...this.snapshot.form, ...v }))
       ),
       formDirty: this.form.statusChanges.pipe(map(() => this.form.dirty)),
       formValid: this.form.statusChanges.pipe(map(() => this.form.valid)),
